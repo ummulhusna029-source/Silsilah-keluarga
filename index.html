@@ -3,44 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Silsilah Keluarga</title>
+    <title>Silsilah Bani Soim</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background-color: #f9f9f9; padding: 20px; }
-        .pohon { display: flex; flex-direction: column; align-items: center; }
-        .kartu { background: white; border: 2px solid #8d6e63; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-width: 150px; margin: 10px; }
-        h1 { color: #5d4037; }
-        h3 { margin: 0; color: #3e2723; }
-        p { margin: 5px 0 0; font-size: 0.9em; color: #757575; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; color: #333; }
+        h1 { text-align: center; color: #5d4037; }
+        
+        .tree { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .level { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; position: relative; }
+        
+        /* Gaya Kartu */
+        .card { background: white; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); width: 140px; padding: 10px; text-align: center; border-top: 5px solid #8d6e63; }
+        .photo-placeholder { width: 80px; height: 100px; background: #e0e0e0; margin: 0 auto 10px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #999; overflow: hidden; }
+        .photo-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .name { font-weight: bold; font-size: 14px; margin: 5px 0; color: #3e2723; }
+        .date { font-size: 11px; color: #757575; line-height: 1.4; }
+        .status-dead { color: #d32f2f; font-weight: bold; }
+
+        /* Garis Penghubung Sederhana */
+        .line { width: 2px; height: 20px; background: #8d6e63; }
     </style>
 </head>
 <body>
+
     <h1>Silsilah Bani Soim</h1>
-    
-    <div class="pohon">
-        <div class="kartu">
-            <h3>Bani Soim</h3>
-            <p>Pusat Silsilah</p>
+
+    <div class="tree">
+        <div class="level">
+            <div class="card">
+                <div class="photo-placeholder">FOTO</div>
+                <div class="name">Soim</div>
+                <div class="date">1930 - 2005<br><span class="status-dead">Meninggal</span><br>(74-75 Tahun)</div>
+            </div>
+            <div class="card">
+                <div class="photo-placeholder">FOTO</div>
+                <div class="name">Kalimah</div>
+                <div class="date">1936 - 2017<br><span class="status-dead">Meninggal</span><br>(80-81 Tahun)</div>
+            </div>
         </div>
 
-        <div style="font-size: 24px; color: #8d6e63;">⬇️</div>
+        <div class="line"></div>
 
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
-            <div class="kartu">
-                <h3>Nama Anak 1</h3>
-                <p>Keturunan Pertama</p>
+        <div class="level">
+            <div class="card">
+                <div class="photo-placeholder">FOTO</div>
+                <div class="name">Masitoh</div>
+                <div class="date">Lahir: 1967<br>(56 Tahun)</div>
             </div>
-            <div class="kartu">
-                <h3>Nama Anak 2</h3>
-                <p>Keturunan Kedua</p>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="level">
+            <div class="card">
+                <div class="photo-placeholder">FOTO</div>
+                <div class="name">Ruhan</div>
+                <div class="date">Lahir: 1987<br>(38 Tahun)</div>
             </div>
-            <div class="kartu">
-                <h3>Nama Anak 3</h3>
-                <p>Keturunan Ketiga</p>
+            <div class="card">
+                <div class="photo-placeholder">FOTO</div>
+                <div class="name">Ibnu</div>
+                <div class="date">1992 - 2015<br><span class="status-dead">Meninggal</span><br>(22-23 Tahun)</div>
+            </div>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="level">
+            <div class="card">
+                <div class="photo-placeholder">FOTO</div>
+                <div class="name">Husna</div>
+                <div class="date">Lahir: 2019<br>(6 Tahun)</div>
             </div>
         </div>
     </div>
 
-    <footer style="margin-top: 50px; font-size: 0.8em; color: #888;">
-        <p>&copy; 2026 Dokumen Keluarga Bani Soim</p>
-    </footer>
 </body>
+</html>
