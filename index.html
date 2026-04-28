@@ -4,71 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Silsilah Keluarga Bani Soim</title>
+    <script src="https://balkangraph.com/js/familytree.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f1ea; margin: 0; padding: 20px; color: #333; }
-        h1 { text-align: center; color: #5d4037; margin-bottom: 30px; }
-        .pohon { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1200px; margin: 0 auto; }
-        .kartu { background: white; border-radius: 12px; width: 160px; padding: 15px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-top: 5px solid #8d6e63; transition: transform 0.2s; }
-        .kartu:hover { transform: translateY(-5px); }
-        .foto-box { width: 100px; height: 120px; background: #e0e0e0; margin: 0 auto 10px; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; font-size: 12px; color: #999; border: 1px solid #ddd; }
-        .foto-box img { width: 100%; height: 100%; object-fit: cover; }
-        .nama { font-weight: bold; font-size: 16px; margin: 5px 0; color: #3e2723; text-transform: capitalize; }
-        .tgl { font-size: 12px; color: #666; margin: 2px 0; }
-        .status-wafat { color: #d32f2f; font-weight: bold; font-size: 11px; margin-top: 5px; display: block; }
-        #loading { text-align: center; font-style: italic; color: #888; }
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: sans-serif; }
+        #tree { width: 100%; height: 100%; background-color: #f4f1ea; }
+        .btn-tambah { position: fixed; bottom: 20px; right: 20px; padding: 15px 25px; background: #8d6e63; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-weight: bold; z-index: 100; }
     </style>
 </head>
 <body>
 
-    <h1>Silsilah Bani Soim</h1>
-    <div id="loading">Memuat data keluarga...</div>
-    <div id="data-silsilah" class="pohon"></div>
+    <div id="tree"></div>
+    <button class="btn-tambah" onclick="window.open('https://docs.google.com/spreadsheets/d/1vZ_BVgC_1lzhUTwLhu2imx0WsqMOs4U_BLIfcaj1-1I/edit', '_blank')">
+        + Tambah/Edit Data
+    </button>
 
     <script>
-        // Link CSV yang sudah disesuaikan dari Google Sheets kamu
-        const urlCSV = 'https://docs.google.com/spreadsheets/d/1vbWR_0Dp0oas9AsNwBuuSE7xmSFh34mZ665DFs-hQMo/export?format=csv';
+        const urlCSV = 'https://docs.google.com/spreadsheets/d/1vZ_BVgC_1lzhUTwLhu2imx0WsqMOs4U_BLIfcaj1-1I/export?format=csv';
 
-        async function tampilkanSilsilah() {
-            try {
-                const respon = await fetch(urlCSV);
-                const dataText = await respon.text();
-                
-                // Memisahkan baris dan menghilangkan header (baris pertama)
-                const baris = dataText.split('\n').slice(1);
-                let htmlKonten = '';
+        async function loadTree() {
+            const response = await fetch(urlCSV);
+            const dataText = await response.text();
+            const rows = dataText.split('\n').slice(1);
+            
+            const familyData = [];
 
-                baris.forEach(barisData => {
-                    // Menggunakan regex untuk memisahkan koma (menghindari masalah jika ada koma di dalam teks)
-                    const kolom = barisData.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                    
-                    if (kolom[0] && kolom[0].trim() !== "") {
-                        const nama = kolom[0].replace(/"/g, '').trim();
-                        const tglLahir = kolom[1] ? kolom[1].replace(/"/g, '').trim() : '-';
-                        const tglWafat = kolom[2] ? kolom[2].replace(/"/g, '').trim() : '';
-                        const linkFoto = kolom[3] ? kolom[3].replace(/"/g, '').trim() : '';
+            rows.forEach(row => {
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                if (cols[0] && cols[0].trim() !== "") {
+                    familyData.push({
+                        id: cols[0].trim(),
+                        pids: cols[6] ? [cols[6].trim()] : [], // ID Pasangan
+                        mid: cols[5] ? cols[5].trim() : null,  // ID Ibu
+                        fid: cols[4] ? cols[4].trim() : null,  // ID Ayah
+                        name: cols[1].replace(/"/g, '').trim(),
+                        born: cols[2] ? cols[2].replace(/"/g, '').trim() : '',
+                        dead: cols[3] ? cols[3].replace(/"/g, '').trim() : '',
+                        img: cols[7] ? cols[7].replace(/"/g, '').trim() : ''
+                    });
+                }
+            });
 
-                        htmlKonten += `
-                            <div class="kartu">
-                                <div class="foto-box">
-                                    ${linkFoto ? `<img src="${linkFoto}" alt="${nama}">` : 'Tanpa Foto'}
-                                </div>
-                                <div class="nama">${nama}</div>
-                                <div class="tgl">Lahir: ${tglLahir}</div>
-                                ${tglWafat ? `<span class="status-wafat">Wafat: ${tglWafat}</span>` : ''}
-                            </div>
-                        `;
-                    }
-                });
-
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('data-silsilah').innerHTML = htmlKonten;
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('loading').innerHTML = 'Gagal memuat data. Pastikan akses Google Sheets sudah disetel ke "Siapa saja yang memiliki link".';
-            }
+            var family = new FamilyTree(document.getElementById("tree"), {
+                mouseScrol: FamilyTree.none,
+                mode: 'dark',
+                template: 'tommy',
+                nodeBinding: {
+                    field_0: "name",
+                    field_1: "born",
+                    img_0: "img"
+                },
+                nodes: familyData
+            });
         }
 
-        tampilkanSilsilah();
+        loadTree();
     </script>
 </body>
 </html>
